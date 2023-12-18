@@ -8,14 +8,14 @@ service /nic on new http:Listener(9090) {
 
         // Writes the incoming stream to a file using the `io:fileWriteBlocksFromStream` API
         // by providing the file location to which the content should be written.
-        check io:fileWriteBlocksFromStream("/files/"+requestID+"jpeg", streamer);
+        check io:fileWriteBlocksFromStream("/files/"+requestID+".jpeg", streamer);
         check streamer.close();
         return "File Received!";
     }
 
     resource function get download(string requestID) returns http:Response|error {
         
-        string filePath = "/files/"+requestID+"jpeg";
+        string filePath = "/files/"+requestID+".jpeg";
         string contentType = "image/*";
 
         // Read the file content
