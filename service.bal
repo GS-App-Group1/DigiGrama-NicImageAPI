@@ -3,20 +3,20 @@ import ballerina/io;
 
 service /nic on new http:Listener(9090) {
 
-    resource function post upload(http:Request request) returns string|error {
+    resource function post upload(http:Request request,string requestID) returns string|error {
         stream<byte[], io:Error?> streamer = check request.getByteStream();
 
         // Writes the incoming stream to a file using the `io:fileWriteBlocksFromStream` API
         // by providing the file location to which the content should be written.
-        check io:fileWriteBlocksFromStream("/files/image.jpeg", streamer);
+        check io:fileWriteBlocksFromStream("/files/"+requestID+"jpeg", streamer);
         check streamer.close();
         return "File Received!";
     }
 
-    resource function get download() returns http:Response|error {
+    resource function get download(string requestID) returns http:Response|error {
         
-        string filePath = "/files/image.jpeg";
-        string contentType = "image/jpeg";
+        string filePath = "/files/"+requestID+"jpeg";
+        string contentType = "image/*";
 
         // Read the file content
         byte[] fileContent = check io:fileReadBytes(filePath);
